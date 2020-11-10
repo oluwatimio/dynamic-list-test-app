@@ -1,0 +1,64 @@
+{
+  "_from": "@shopify/react-hooks@^1.11.2",
+  "_id": "@shopify/react-hooks@1.11.2",
+  "_inBundle": false,
+  "_integrity": "sha512-KVbBxdOXcShtj+PJrfq5FW0T6DkqXkt3Q4YKf3NlGrBB0vprrN71Zs4MAyUhCqJp1B7qfKM8dgHcikmIxtDp4Q==",
+  "_location": "/@shopify/react-hooks",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "range",
+    "registry": true,
+    "raw": "@shopify/react-hooks@^1.11.2",
+    "name": "@shopify/react-hooks",
+    "escapedName": "@shopify%2freact-hooks",
+    "scope": "@shopify",
+    "rawSpec": "^1.11.2",
+    "saveSpec": null,
+    "fetchSpec": "^1.11.2"
+  },
+  "_requiredBy": [
+    "/@shopify/react-form"
+  ],
+  "_resolved": "https://registry.npmjs.org/@shopify/react-hooks/-/react-hooks-1.11.2.tgz",
+  "_shasum": "216421d52abc94c5c8e5b8821ff7800da6949110",
+  "_spec": "@shopify/react-hooks@^1.11.2",
+  "_where": "/Users/timi/Desktop/typescript-test/node_modules/@shopify/react-form",
+  "author": {
+    "name": "Shopify Inc."
+  },
+  "bugs": {
+    "url": "https://github.com/Shopify/quilt/issues"
+  },
+  "bundleDependencies": false,
+  "dependencies": {
+    "tslib": "^1.14.1"
+  },
+  "deprecated": false,
+  "description": "A collection of primitive React hooks",
+  "files": [
+    "dist/*",
+    "!tsconfig.tsbuildinfo"
+  ],
+  "homepage": "https://github.com/Shopify/quilt/blob/master/packages/react-hooks/README.md",
+  "license": "MIT",
+  "main": "dist/src/index.js",
+  "name": "@shopify/react-hooks",
+  "peerDependencies": {
+    "react": ">=16.8.0 <17.0.0"
+  },
+  "publishConfig": {
+    "access": "public",
+    "@shopify:registry": "https://registry.npmjs.org"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Shopify/quilt.git",
+    "directory": "packages/react-hooks"
+  },
+  "scripts": {
+    "build": "tsc --p tsconfig.json"
+  },
+  "sideEffects": false,
+  "types": "dist/src/index.d.ts",
+  "version": "1.11.2"
+}

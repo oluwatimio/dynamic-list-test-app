@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {useDynamicList, useForm, useList} from '@shopify/react-form';
+import {useDynamicList, useForm, useList} from './shopify/react-form';
 import logo from './logo.svg';
 import {TextField, AppProvider, Button, Form, FormLayout, PageActions, Page} from '@shopify/polaris'
 import '@shopify/polaris/dist/styles.css';
