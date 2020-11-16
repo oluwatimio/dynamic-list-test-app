@@ -1,11 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var tslib_1 = require("tslib");
-var react_1 = require("react");
-var fast_deep_equal_1 = tslib_1.__importDefault(require("fast-deep-equal"));
-var utilities_1 = require("../../utilities");
-var reducer_1 = require("./reducer");
-var hooks_1 = require("./hooks");
+var baselist_1 = require("./baselist");
 /**
  * A custom hook for handling the state and validations of fields for a list of objects.
  *
@@ -111,26 +106,7 @@ var hooks_1 = require("./hooks");
  */
 function useList(listOrConfig, validationDependencies) {
     if (validationDependencies === void 0) { validationDependencies = []; }
-    var list = Array.isArray(listOrConfig) ? listOrConfig : listOrConfig.list;
-    var validates = Array.isArray(listOrConfig)
-        ? {}
-        : listOrConfig.validates || {};
-    var _a = tslib_1.__read(reducer_1.useListReducer(list), 2), state = _a[0], dispatch = _a[1];
-    react_1.useEffect(function () {
-        if (!fast_deep_equal_1.default(list, state.initial)) {
-            dispatch(reducer_1.reinitializeAction(list));
-        }
-    }, [list, state.initial, dispatch]);
-    var validationConfigs = react_1.useMemo(function () {
-        return utilities_1.mapObject(validates, utilities_1.normalizeValidation);
-    }, tslib_1.__spread([validates], validationDependencies));
-    var handlers = hooks_1.useHandlers(state, dispatch, validationConfigs);
-    return react_1.useMemo(function () {
-        return state.list.map(function (item, index) {
-            return utilities_1.mapObject(item, function (field, key) {
-                return tslib_1.__assign(tslib_1.__assign({}, field), handlers[index][key]);
-            });
-        });
-    }, [state.list, handlers]);
+    var fields = baselist_1.useBaseList(listOrConfig, validationDependencies).fields;
+    return fields;
 }
 exports.useList = useList;

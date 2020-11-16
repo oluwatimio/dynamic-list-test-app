@@ -1,5 +1,5 @@
-import React, {useState} from 'react';
-import {useDynamicList, useForm, useList} from './shopify/react-form';
+import React from 'react';
+import {useDynamicList, useForm} from './shopify/react-form';
 import logo from './logo.svg';
 import {TextField, AppProvider, Button, Form, FormLayout, PageActions, Page} from '@shopify/polaris'
 import '@shopify/polaris/dist/styles.css';
@@ -14,7 +14,7 @@ function App() {
     cardNumber: '',
     cvv: '',
   })
-  const {fields, addField, removeField} = useDynamicList([{cardNumber: '4234 6738 8920 8902', cvv: '422'}], emptyCardFactory);
+  const {fields, addItem, removeItem} = useDynamicList([{cardNumber: '4234 6738 8920 8902', cvv: '422'}], emptyCardFactory);
   const {submit, dirty, submitting} = useForm({
     fields: {
       fields
@@ -35,11 +35,11 @@ function App() {
                       <TextField placeholder="Card Number" label="Card Number" value={field.cardNumber.value} onChange={field.cardNumber.onChange}/>
                       <TextField placeholder="CVV" label="CVV" value={field.cvv.value} onChange={field.cvv.onChange} key={index}/>
                       <div style={{marginTop: '23px'}}>
-                        <Button onClick={() => removeField(index)}>Remove</Button>
+                        <Button onClick={() => removeItem(index)}>Remove</Button>
                       </div>
                     </FormLayout.Group>
             ))}
-            <Button onClick={() => addField()}>Add Card</Button>
+            <Button onClick={() => addItem()}>Add Card</Button>
           </FormLayout>
           <PageActions
             primaryAction={{

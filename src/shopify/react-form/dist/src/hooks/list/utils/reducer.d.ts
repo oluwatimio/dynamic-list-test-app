@@ -1,5 +1,5 @@
 /// <reference types="react" />
-import { FieldStates, ErrorValue } from '../../types';
+import { FieldStates, ErrorValue } from '../../../types';
 export declare type ListAction<Item> = ReinitializeAction<Item> | AddFieldAction<Item> | RemoveFieldAction | UpdateErrorAction<Item> | UpdateAction<Item, keyof Item> | ResetAction<Item, keyof Item> | NewDefaultAction<Item, keyof Item>;
 interface ReinitializeAction<Item> {
     type: 'reinitialize';

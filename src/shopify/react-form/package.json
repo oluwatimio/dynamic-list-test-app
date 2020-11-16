@@ -1,44 +1,31 @@
 {
-  "_from": "@shopify/react-form@0.8.1",
-  "_id": "@shopify/react-form@0.8.1",
-  "_inBundle": false,
-  "_integrity": "sha512-MIBoeIb4HoAEZ6XB0pHi+7woYeq/+ocFoDD9xZiAym3FxTN+p8du6UcZ5WwLIIt0AcVwc6IJJij7EgAiFYTCDQ==",
-  "_location": "/@shopify/react-form",
-  "_phantomChildren": {},
-  "_requested": {
-    "type": "version",
-    "registry": true,
-    "raw": "@shopify/react-form@0.8.1",
-    "name": "@shopify/react-form",
-    "escapedName": "@shopify%2freact-form",
-    "scope": "@shopify",
-    "rawSpec": "0.8.1",
-    "saveSpec": null,
-    "fetchSpec": "0.8.1"
+  "name": "@shopify/react-form",
+  "version": "0.8.1",
+  "license": "MIT",
+  "description": "Manage React forms tersely and safely-typed with no magic using React hooks",
+  "main": "dist/src/index.js",
+  "types": "dist/src/index.d.ts",
+  "scripts": {
+    "build": "tsc --p tsconfig.json"
   },
-  "_requiredBy": [
-    "/"
-  ],
-  "_resolved": "https://registry.npmjs.org/@shopify/react-form/-/react-form-0.8.1.tgz",
-  "_shasum": "8c489f51d6cbbcc159b20907d1bc471e1774569d",
-  "_spec": "@shopify/react-form@0.8.1",
-  "_where": "/Users/timi/Desktop/typescript-test",
-  "author": {
-    "name": "Shopify Inc."
+  "sideEffects": false,
+  "publishConfig": {
+    "access": "public",
+    "@shopify:registry": "https://registry.npmjs.org"
+  },
+  "author": "Shopify Inc.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Shopify/quilt.git",
+    "directory": "packages/react-form"
   },
   "bugs": {
     "url": "https://github.com/Shopify/quilt/issues"
   },
-  "bundleDependencies": false,
-  "dependencies": {
-    "@shopify/predicates": "^1.2.7",
-    "@shopify/react-hooks": "^1.11.2",
-    "fast-deep-equal": "^2.0.1",
-    "get-value": "^3.0.1",
-    "tslib": "^1.14.1"
+  "homepage": "https://github.com/Shopify/quilt/blob/master/packages/react-form/README.md",
+  "peerDependencies": {
+    "react": ">=16.8.0 <17.0.0"
   },
-  "deprecated": false,
-  "description": "Manage React forms tersely and safely-typed with no magic using React hooks",
   "devDependencies": {
     "@types/faker": "^4.1.5",
     "faker": "^4.1.0"
@@ -47,26 +34,11 @@
     "dist/*",
     "!tsconfig.tsbuildinfo"
   ],
-  "homepage": "https://github.com/Shopify/quilt/blob/master/packages/react-form/README.md",
-  "license": "MIT",
-  "main": "dist/src/index.js",
-  "name": "@shopify/react-form",
-  "peerDependencies": {
-    "react": ">=16.8.0 <17.0.0"
-  },
-  "publishConfig": {
-    "access": "public",
-    "@shopify:registry": "https://registry.npmjs.org"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Shopify/quilt.git",
-    "directory": "packages/react-form"
-  },
-  "scripts": {
-    "build": "tsc --p tsconfig.json"
-  },
-  "sideEffects": false,
-  "types": "dist/src/index.d.ts",
-  "version": "0.8.1"
+  "dependencies": {
+    "@shopify/predicates": "^1.2.7",
+    "@shopify/react-hooks": "^1.11.2",
+    "fast-deep-equal": "^2.0.1",
+    "get-value": "^3.0.1",
+    "tslib": "^1.14.1"
+  }
 }

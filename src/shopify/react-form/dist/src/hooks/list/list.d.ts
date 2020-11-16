@@ -1,8 +1,5 @@
-import { ValidationDictionary, FieldDictionary, ListValidationContext } from '../../types';
-export interface FieldListConfig<Item extends object> {
-    list: Item[];
-    validates?: Partial<ValidationDictionary<Item, ListValidationContext<Item>>>;
-}
+import { FieldDictionary } from '../../types';
+import { FieldListConfig } from './baselist';
 /**
  * A custom hook for handling the state and validations of fields for a list of objects.
  *
