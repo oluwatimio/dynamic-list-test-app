@@ -1,6 +1,6 @@
 /// <reference types="react" />
 import { ValidationDictionary, FieldDictionary, ListValidationContext } from '../../types';
-import { ListAction } from './utils';
+import { ListAction } from './hooks';
 export interface FieldListConfig<Item extends object> {
     list: Item[];
     validates?: Partial<ValidationDictionary<Item, ListValidationContext<Item>>>;

@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var react_1 = require("react");
 var utilities_1 = require("../../../utilities");
 var utils_1 = require("../utils");
-var utils_2 = require("../utils");
+var index_1 = require("./index");
 function useHandlers(state, dispatch, validationConfigs) {
     return react_1.useMemo(function () {
         return state.list.map(function (item, index) {
@@ -16,8 +16,8 @@ function useHandlers(state, dispatch, validationConfigs) {
                         return;
                     }
                     var siblings = state.list.filter(function (listItem) { return listItem !== item; });
-                    return utils_2.runValidation(function (error) {
-                        return dispatch(utils_1.updateErrorAction({ target: target, error: error || '' }));
+                    return utils_1.runValidation(function (error) {
+                        return dispatch(index_1.updateErrorAction({ target: target, error: error || '' }));
                     }, { value: value, siblings: siblings, listItem: item }, validates);
                 }
                 return {
@@ -25,7 +25,7 @@ function useHandlers(state, dispatch, validationConfigs) {
                         var normalizedValue = (utilities_1.isChangeEvent(value)
                             ? value.target.value
                             : value);
-                        dispatch(utils_1.updateAction({
+                        dispatch(index_1.updateAction({
                             target: target,
                             value: normalizedValue,
                         }));
@@ -34,10 +34,10 @@ function useHandlers(state, dispatch, validationConfigs) {
                         }
                     },
                     reset: function () {
-                        dispatch(utils_1.resetAction({ target: target }));
+                        dispatch(index_1.resetAction({ target: target }));
                     },
                     newDefaultValue: function (value) {
-                        dispatch(utils_1.newDefaultAction({ target: target, value: value }));
+                        dispatch(index_1.newDefaultAction({ target: target, value: value }));
                     },
                     runValidation: validate,
                     onBlur: function () {
@@ -48,7 +48,7 @@ function useHandlers(state, dispatch, validationConfigs) {
                         validate();
                     },
                     setError: function (error) {
-                        dispatch(utils_1.updateErrorAction({ target: target, error: error }));
+                        dispatch(index_1.updateErrorAction({ target: target, error: error }));
                     },
                 };
             });

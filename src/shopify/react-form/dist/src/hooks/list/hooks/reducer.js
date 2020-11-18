@@ -2,8 +2,8 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var tslib_1 = require("tslib");
 var react_1 = require("react");
-var field_1 = require("../field");
-var utilities_1 = require("../../utilities");
+var field_1 = require("../../field");
+var utilities_1 = require("../../../utilities");
 function reinitializeAction(list) {
     return {
         type: 'reinitialize',
@@ -11,6 +11,20 @@ function reinitializeAction(list) {
     };
 }
 exports.reinitializeAction = reinitializeAction;
+function addFieldItemAction(list) {
+    return {
+        type: 'addFieldItem',
+        payload: { list: list },
+    };
+}
+exports.addFieldItemAction = addFieldItemAction;
+function removeFieldItemAction(indexToRemove) {
+    return {
+        type: 'removeFieldItem',
+        payload: { indexToRemove: indexToRemove },
+    };
+}
+exports.removeFieldItemAction = removeFieldItemAction;
 function updateAction(payload) {
     return {
         type: 'update',
@@ -53,6 +67,14 @@ function reduceList(state, action) {
                 initial: action.payload.list,
                 list: action.payload.list.map(initialListItemState),
             };
+        }
+        case 'addFieldItem': {
+            return tslib_1.__assign(tslib_1.__assign({}, state), { list: tslib_1.__spread(state.list, action.payload.list.map(initialListItemState)) });
+        }
+        case 'removeFieldItem': {
+            var newList = tslib_1.__spread(state.list);
+            newList.splice(action.payload.indexToRemove, 1);
+            return tslib_1.__assign(tslib_1.__assign({}, state), { list: newList });
         }
         case 'updateError': {
             var _a = action.payload, target = _a.target, error = _a.error;

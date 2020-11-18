@@ -197,33 +197,33 @@
         "version": "33c63bd73716178766ef9b12fc1c3dfb5c1675d2a1c2e3c5a8aa09cb7556d6a3",
         "signature": "d694666eea5f7f0e3f0f476c85f503c2e479b227201809e7121578788f5fffc4"
       },
-      "../src/hooks/list/utils/reducer.ts": {
-        "version": "ebf241dff294cbd6ff944fac1c3473eb3a7d9954fd077331f9457af6b2828b34",
-        "signature": "dd11b3d38dcfa345b16a1a1a1fc6161d4487712cc6a3d7f4b6b6d8a250197d72"
-      },
       "../src/hooks/list/utils/index.ts": {
-        "version": "3bf0aaee94e30d2739834e80ccaf5ef4c56df2051e347a34950f9747ca57f13f",
-        "signature": "1a75d972630cde8cd289da349eb67b53d01afb5f1c479958134292b28ef4ea12"
+        "version": "473afa83a7e3657c2a9582895008d42196905382073c4a927915e35b8fb17ad7",
+        "signature": "d8d36a3f2b7503ea22e0bafcf2a8536f310f35f9a4d7774f35bdbe6bc046b743"
       },
       "../src/hooks/list/hooks/handlers.ts": {
-        "version": "4d5ef130d58fea2deda5858e8f73ec2c4234d2cd96ad03b900f48084272dcf77",
-        "signature": "64cd7b2e50928e70681538a0d969ea974f6689e709f2e624473275387b036230"
+        "version": "27413b40ead1445e9fee361ba3b16b78d03fa063d7fb607a1a10a7395937e3c2",
+        "signature": "904589e8a665eadd853ecd3b21d2214daeb994ef5c2895849b44b5fd22c0225b"
+      },
+      "../src/hooks/list/hooks/reducer.ts": {
+        "version": "de86a6de1830c3fe9f0c5e579bfb39bd403ff3ed20ff3b0f02ee25b4c17d5cb2",
+        "signature": "063370566d05367560b08e67c6316419ec0e6d640f9f1ea5bef472e83066a116"
       },
       "../src/hooks/list/hooks/index.ts": {
-        "version": "3d67542f2b8375d88d0e3cd19d7c9e2d49892e06e208d1a54bca0c006a503ddc",
-        "signature": "9633d4e633b719a0361d233400d29871084ce2b2d2eacb3c4bb6c881896192c7"
+        "version": "fe061ece560aea512240eee8bd40bee317bdcd9cd44dd819f14feed62d6b4005",
+        "signature": "45321393cf4a243aeecfba300a7c564169ee1be96bf442528a32f3e558322ef4"
       },
       "../src/hooks/list/baselist.ts": {
-        "version": "2ac4207e6a8bcee70eb60e75cb1d7cf25e4a7ee783002763ee906ed6135e6121",
-        "signature": "ab8992d26125d1db4daa9917b834c7383318a425b7e94296edcf41bcf64ed545"
+        "version": "dc02ed21c4451982c9b8b94340ef39fccf1d94381b70675e5083811ecf00c14e",
+        "signature": "8bb588969ca1b8ae5d64564d91659f4abaa7c7deea4499ed5b86127b96b5f44d"
       },
       "../src/hooks/list/list.ts": {
-        "version": "78a0074433c1cc362af73ee329b8fbd017d1e0c7f4cf8a2373a8f1606dfeceed",
-        "signature": "a51f97ea0d48031b923930d06cf6cc1659c0fdcec92c1e737d09c3a6123d0d39"
+        "version": "ac2e10656aeb786172c22cbf65f9631cf68df9f57c40427ce5a667d6c766cf82",
+        "signature": "f3ec8cb8c104beec4f4c86b49dcf42bebf56866c00a0d4ad04d2d9543ff0f0af"
       },
       "../src/hooks/list/dynamiclist.ts": {
-        "version": "acfa4128894593ab87dbe1de74f27b752b15bb5914911f7975698e63095647c9",
-        "signature": "f7f47237cee75cebb25a7a76fbcb709518f731fab0cda2b09224cb793c08c969"
+        "version": "3c2b9d3b12b1eafed9cf168c2949096b59cd2e6013040dddf2859e01bfa94ba0",
+        "signature": "2bd4e9d4955f205a7f63c7a906a1edb3f0e7eccc25f1bdfd42bf63bd67da5f25"
       },
       "../src/hooks/list/index.ts": {
         "version": "640643ee3251be71f598bdc7ece4f9880b93c6cdbb8a52add305395078b61885",
@@ -1755,22 +1755,8 @@
         "../../../node_modules/@types/node/util.d.ts",
         "../../../node_modules/@types/node/ts3.2/util.d.ts"
       ],
-      "../src/hooks/list/utils/reducer.ts": [
-        "../../../node_modules/@types/react/index.d.ts",
-        "../src/types.ts",
-        "../src/hooks/field/index.ts",
-        "../src/utilities.ts",
-        "../../../config/typescript/modules.d.ts",
-        "../../../node_modules/@types/node/url.d.ts",
-        "../../../node_modules/@types/node/fs.d.ts",
-        "../../../node_modules/@types/node/ts3.2/fs.d.ts",
-        "../../../node_modules/@types/graceful-fs/index.d.ts",
-        "../../../node_modules/@types/node/util.d.ts",
-        "../../../node_modules/@types/node/ts3.2/util.d.ts"
-      ],
       "../src/hooks/list/utils/index.ts": [
         "../src/hooks/list/utils/utils.ts",
-        "../src/hooks/list/utils/reducer.ts",
         "../../../config/typescript/modules.d.ts",
         "../../../node_modules/@types/node/url.d.ts",
         "../../../node_modules/@types/node/fs.d.ts",
@@ -1784,6 +1770,20 @@
         "../src/utilities.ts",
         "../src/types.ts",
         "../src/hooks/list/utils/index.ts",
+        "../src/hooks/list/hooks/index.ts",
+        "../../../config/typescript/modules.d.ts",
+        "../../../node_modules/@types/node/url.d.ts",
+        "../../../node_modules/@types/node/fs.d.ts",
+        "../../../node_modules/@types/node/ts3.2/fs.d.ts",
+        "../../../node_modules/@types/graceful-fs/index.d.ts",
+        "../../../node_modules/@types/node/util.d.ts",
+        "../../../node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "../src/hooks/list/hooks/reducer.ts": [
+        "../../../node_modules/@types/react/index.d.ts",
+        "../src/types.ts",
+        "../src/hooks/field/index.ts",
+        "../src/utilities.ts",
         "../../../config/typescript/modules.d.ts",
         "../../../node_modules/@types/node/url.d.ts",
         "../../../node_modules/@types/node/fs.d.ts",
@@ -1794,6 +1794,7 @@
       ],
       "../src/hooks/list/hooks/index.ts": [
         "../src/hooks/list/hooks/handlers.ts",
+        "../src/hooks/list/hooks/reducer.ts",
         "../../../config/typescript/modules.d.ts",
         "../../../node_modules/@types/node/url.d.ts",
         "../../../node_modules/@types/node/fs.d.ts",
@@ -1807,7 +1808,6 @@
         "../../../node_modules/fast-deep-equal/index.d.ts",
         "../src/types.ts",
         "../src/utilities.ts",
-        "../src/hooks/list/utils/index.ts",
         "../src/hooks/list/hooks/index.ts",
         "../../../config/typescript/modules.d.ts",
         "../../../node_modules/@types/node/url.d.ts",
@@ -1830,7 +1830,7 @@
       ],
       "../src/hooks/list/dynamiclist.ts": [
         "../src/types.ts",
-        "../src/hooks/list/utils/index.ts",
+        "../src/hooks/list/hooks/index.ts",
         "../src/hooks/list/baselist.ts",
         "../../../config/typescript/modules.d.ts",
         "../../../node_modules/@types/node/url.d.ts",
@@ -5067,24 +5067,24 @@
       "../src/hooks/list/utils/utils.ts": [
         "../src/types.ts"
       ],
-      "../src/hooks/list/utils/reducer.ts": [
+      "../src/hooks/list/utils/index.ts": [
+        "../src/hooks/list/utils/utils.ts"
+      ],
+      "../src/hooks/list/hooks/handlers.ts": [
+        "../src/hooks/list/hooks/index.ts",
+        "../src/types.ts"
+      ],
+      "../src/hooks/list/hooks/reducer.ts": [
         "../../../node_modules/@types/react/index.d.ts",
         "../src/types.ts"
       ],
-      "../src/hooks/list/utils/index.ts": [
-        "../src/hooks/list/utils/utils.ts",
-        "../src/hooks/list/utils/reducer.ts"
-      ],
-      "../src/hooks/list/hooks/handlers.ts": [
-        "../src/hooks/list/utils/index.ts",
-        "../src/types.ts"
-      ],
       "../src/hooks/list/hooks/index.ts": [
-        "../src/hooks/list/hooks/handlers.ts"
+        "../src/hooks/list/hooks/handlers.ts",
+        "../src/hooks/list/hooks/reducer.ts"
       ],
       "../src/hooks/list/baselist.ts": [
         "../src/types.ts",
-        "../src/hooks/list/utils/index.ts"
+        "../src/hooks/list/hooks/index.ts"
       ],
       "../src/hooks/list/list.ts": [
         "../src/hooks/list/baselist.ts",
@@ -7904,13 +7904,12 @@
       "../src/hooks/field/field.ts",
       "../src/hooks/field/index.ts",
       "../src/hooks/list/utils/utils.ts",
-      "../src/hooks/list/utils/reducer.ts",
       "../src/hooks/list/utils/index.ts",
       "../src/hooks/list/hooks/handlers.ts",
+      "../src/hooks/list/hooks/reducer.ts",
       "../src/hooks/list/hooks/index.ts",
       "../src/hooks/list/baselist.ts",
       "../src/hooks/list/list.ts",
-      "../src/hooks/list/index.ts",
       "../src/hooks/dirty.ts",
       "../src/hooks/visitfields.ts",
       "../src/hooks/reset.ts",
@@ -7929,8 +7928,6 @@
       "../../react-hooks/dist/src/index.d.ts",
       "../src/hooks/submit.ts",
       "../src/hooks/form.ts",
-      "../src/hooks/index.ts",
-      "../src/index.ts",
       "../../../node_modules/@types/faker/index.d.ts",
       "../src/hooks/list/test/utils.tsx",
       "../../../node_modules/@types/accept-language-parser/index.d.ts",
@@ -8167,7 +8164,10 @@
       "../../../node_modules/@types/yargs-parser/index.d.ts",
       "../../../node_modules/@types/yargs/index.d.ts",
       "../../../node_modules/@types/zen-observable/index.d.ts",
-      "../src/hooks/list/dynamiclist.ts"
+      "../src/hooks/list/dynamiclist.ts",
+      "../src/hooks/list/index.ts",
+      "../src/hooks/index.ts",
+      "../src/index.ts"
     ]
   },
   "version": "3.7.5"

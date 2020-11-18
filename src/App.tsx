@@ -10,11 +10,14 @@ interface Card {
 }
 function App() {
 
-  const emptyCardFactory = (): Card => ({
+  const emptyCardFactory = (argument: any): Card[] => ([{
+    cardNumber: argument,
+    cvv: '',
+  }, {
     cardNumber: '',
     cvv: '',
-  })
-  const {fields, addItem, removeItem} = useDynamicList([{cardNumber: '4234 6738 8920 8902', cvv: '422'}], emptyCardFactory);
+  }])
+  const {fields, addItem, removeItem} = useDynamicList<Card>([{cardNumber: '4234 6738 8920 8902', cvv: '422'}], emptyCardFactory);
   const {submit, dirty, submitting} = useForm({
     fields: {
       fields
@@ -39,7 +42,7 @@ function App() {
                       </div>
                     </FormLayout.Group>
             ))}
-            <Button onClick={() => addItem()}>Add Card</Button>
+            <Button onClick={() => addItem("TEST")}>Add Card</Button>
           </FormLayout>
           <PageActions
             primaryAction={{

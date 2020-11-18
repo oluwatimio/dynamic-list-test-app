@@ -4,7 +4,6 @@ var tslib_1 = require("tslib");
 var react_1 = require("react");
 var fast_deep_equal_1 = tslib_1.__importDefault(require("fast-deep-equal"));
 var utilities_1 = require("../../utilities");
-var utils_1 = require("./utils");
 var hooks_1 = require("./hooks");
 function useBaseList(listOrConfig, validationDependencies) {
     if (validationDependencies === void 0) { validationDependencies = []; }
@@ -12,10 +11,10 @@ function useBaseList(listOrConfig, validationDependencies) {
     var validates = Array.isArray(listOrConfig)
         ? {}
         : listOrConfig.validates || {};
-    var _a = tslib_1.__read(utils_1.useListReducer(list), 2), state = _a[0], dispatch = _a[1];
+    var _a = tslib_1.__read(hooks_1.useListReducer(list), 2), state = _a[0], dispatch = _a[1];
     react_1.useEffect(function () {
         if (!fast_deep_equal_1.default(list, state.initial)) {
-            dispatch(utils_1.reinitializeAction(list));
+            dispatch(hooks_1.reinitializeAction(list));
         }
     }, [list, state.initial, dispatch]);
     var validationConfigs = react_1.useMemo(function () {
