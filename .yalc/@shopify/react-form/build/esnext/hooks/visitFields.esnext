@@ -1,0 +1,9 @@
+import { useCallback, useRef } from 'react';
+import { reduceFields } from "../utilities.esnext";
+export default function useVisitFields(fieldBag, visitor) {
+  const fieldBagRef = useRef(fieldBag);
+  fieldBagRef.current = fieldBag;
+  return useCallback(() => {
+    reduceFields(fieldBagRef.current, (_, field) => visitor(field));
+  }, [visitor]);
+}

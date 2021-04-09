@@ -1,6 +1,5 @@
-import React from 'react';
-import {useDynamicList, useForm} from './shopify/react-form';
-import logo from './logo.svg';
+import React, {useEffect} from 'react';
+import {useDynamicList, useForm, useChoiceField} from './shopify/react-form/src';
 import {TextField, AppProvider, Button, Form, FormLayout, PageActions, Page} from '@shopify/polaris'
 import '@shopify/polaris/dist/styles.css';
 
@@ -10,14 +9,13 @@ interface Card {
 }
 function App() {
 
-  const emptyCardFactory = (argument: any): Card[] => ([{
-    cardNumber: argument,
+  const emptyCardFactory = (factoryArgument: any): Card => ({
+    cardNumber: factoryArgument,
     cvv: '',
-  }, {
-    cardNumber: '',
-    cvv: '',
-  }])
-  const {fields, addItem, removeItem} = useDynamicList<Card>([{cardNumber: '4234 6738 8920 8902', cvv: '422'}], emptyCardFactory);
+  })
+
+  const {fields, addItem, removeItem, reset, dirty: listDirty} = useDynamicList([{cardNumber: '4234 6738 8920 8902', cvv: '422'}], emptyCardFactory);
+
   const {submit, dirty, submitting} = useForm({
     fields: {
       fields
@@ -38,11 +36,11 @@ function App() {
                       <TextField placeholder="Card Number" label="Card Number" value={field.cardNumber.value} onChange={field.cardNumber.onChange}/>
                       <TextField placeholder="CVV" label="CVV" value={field.cvv.value} onChange={field.cvv.onChange} key={index}/>
                       <div style={{marginTop: '23px'}}>
-                        <Button onClick={() => removeItem(index)}>Remove</Button>
+                        <Button onClick={() => removeItem ? removeItem(index) : null}>Remove</Button>
                       </div>
                     </FormLayout.Group>
             ))}
-            <Button onClick={() => addItem("TEST")}>Add Card</Button>
+            <Button onClick={() => addItem ? addItem('10') : null}>Add Card</Button>
           </FormLayout>
           <PageActions
             primaryAction={{
@@ -54,10 +52,10 @@ function App() {
             }}
             secondaryActions={[
               {
-                content: 'Delete',
-                destructive: true,
-                onAction: () => {},
-                accessibilityLabel: 'Delete',
+                content: 'Reset',
+                onAction: reset,
+                accessibilityLabel: 'Reset',
+                disabled: !dirty && !listDirty
               },
             ]}
           />

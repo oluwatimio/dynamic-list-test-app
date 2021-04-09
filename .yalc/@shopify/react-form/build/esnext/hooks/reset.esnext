@@ -1,0 +1,8 @@
+import useVisitFields from "./visitFields.esnext";
+export function useReset(fieldBag) {
+  return useVisitFields(fieldBag, resetField);
+}
+
+function resetField(field) {
+  field.reset();
+}

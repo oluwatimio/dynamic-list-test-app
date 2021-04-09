@@ -1,0 +1,4 @@
+import { reduceFields } from "../utilities.esnext";
+export function useDirty(fieldBag) {
+  return reduceFields(fieldBag, (dirty, field) => dirty || field.dirty, false);
+}

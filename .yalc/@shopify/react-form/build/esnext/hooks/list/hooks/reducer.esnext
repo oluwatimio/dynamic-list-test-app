@@ -1,0 +1,191 @@
+import { useReducer } from 'react';
+import { reduceField, updateErrorAction as updateFieldError, initialFieldState } from "../../field/index.esnext";
+import { mapObject } from "../../../utilities.esnext";
+export function reinitializeAction(list) {
+  return {
+    type: 'reinitialize',
+    payload: {
+      list
+    }
+  };
+}
+export function addFieldItemAction(list) {
+  return {
+    type: 'addFieldItem',
+    payload: {
+      list
+    }
+  };
+}
+export function moveFieldItemAction(fromIndex, toIndex) {
+  return {
+    type: 'moveFieldItem',
+    payload: {
+      fromIndex,
+      toIndex
+    }
+  };
+}
+export function removeFieldItemAction(indexToRemove) {
+  return {
+    type: 'removeFieldItem',
+    payload: {
+      indexToRemove
+    }
+  };
+}
+export function updateAction(payload) {
+  return {
+    type: 'update',
+    payload
+  };
+}
+export function resetAction(payload) {
+  return {
+    type: 'reset',
+    payload
+  };
+}
+export function resetListAction() {
+  return {
+    type: 'resetList'
+  };
+}
+export function newDefaultAction(payload) {
+  return {
+    type: 'newDefaultValue',
+    payload
+  };
+}
+export function updateErrorAction(payload) {
+  return {
+    type: 'updateError',
+    payload
+  };
+}
+export function useListReducer(initial) {
+  return useReducer(reduceList, {
+    list: initial.map(initialListItemState),
+    initial
+  });
+}
+
+function reduceList(state, action) {
+  switch (action.type) {
+    case 'reinitialize':
+      {
+        return {
+          initial: action.payload.list,
+          list: action.payload.list.map(initialListItemState)
+        };
+      }
+
+    case 'moveFieldItem':
+      {
+        const {
+          fromIndex,
+          toIndex
+        } = action.payload;
+
+        if (fromIndex >= state.list.length || fromIndex < 0 || toIndex >= state.list.length || toIndex < 0) {
+          throw new Error(`Failed to move item from ${fromIndex} to ${toIndex}`);
+        }
+
+        const newList = [...state.list];
+        const [item] = newList.splice(action.payload.fromIndex, 1);
+        newList.splice(action.payload.toIndex, 0, item);
+        return { ...state,
+          list: newList
+        };
+      }
+
+    case 'addFieldItem':
+      {
+        return { ...state,
+          list: [...state.list, ...action.payload.list.map(initialListItemState)]
+        };
+      }
+
+    case 'removeFieldItem':
+      {
+        const newList = [...state.list];
+        newList.splice(action.payload.indexToRemove, 1);
+        return { ...state,
+          list: newList
+        };
+      }
+
+    case 'updateError':
+      {
+        const {
+          payload: {
+            target,
+            error
+          }
+        } = action;
+        const {
+          index,
+          key
+        } = target;
+        const currentItem = state.list[index];
+        currentItem[key] = reduceField(currentItem[key], updateFieldError(error));
+        return { ...state,
+          list: [...state.list]
+        };
+      }
+
+    case 'reset':
+      {
+        const {
+          payload: {
+            target
+          }
+        } = action;
+        const {
+          index,
+          key
+        } = target;
+        const currentItem = state.list[index];
+        currentItem[key] = reduceField(currentItem[key], {
+          type: 'reset'
+        });
+        return { ...state,
+          list: [...state.list]
+        };
+      }
+
+    case 'resetList':
+      {
+        return { ...state,
+          list: state.initial.map(initialListItemState)
+        };
+      }
+
+    case 'update':
+    case 'newDefaultValue':
+      {
+        const {
+          payload: {
+            target,
+            value
+          }
+        } = action;
+        const {
+          index,
+          key
+        } = target;
+        const currentItem = state.list[index];
+        currentItem[key] = reduceField(currentItem[key], {
+          type: action.type,
+          payload: value
+        });
+        return { ...state,
+          list: [...state.list]
+        };
+      }
+  }
+}
+
+function initialListItemState(item) {
+  return mapObject(item, initialFieldState);
+}

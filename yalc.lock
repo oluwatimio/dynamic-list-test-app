@@ -1,0 +1,8 @@
+{
+  "version": "v1",
+  "packages": {
+    "@shopify/react-form": {
+      "signature": "a7720b3abe3841705e01f58aa4761985"
+    }
+  }
+}

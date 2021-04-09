@@ -1,0 +1,122 @@
+import get from 'get-value';
+export function isField(input) {
+  return Object.prototype.hasOwnProperty.call(input, 'value') && Object.prototype.hasOwnProperty.call(input, 'onChange') && Object.prototype.hasOwnProperty.call(input, 'onBlur') && Object.prototype.hasOwnProperty.call(input, 'defaultValue');
+}
+export function mapObject(input, mapper) {
+  return Object.keys(input).reduce((accumulator, key) => {
+    const value = input[key];
+    accumulator[key] = mapper(value, key);
+    return accumulator;
+  }, {});
+} // Eg: set({a: 1}, ['b', 'c'], 2) // => {a: 1, b: {c: 2}}
+
+function setObject(obj, path, value) {
+  const [key, ...restPath] = path;
+
+  if (key == null || obj === null || typeof obj !== 'object') {
+    return obj;
+  }
+
+  if (!restPath.length) {
+    obj[key] = value;
+    return obj;
+  } // creates prop if it doesn't exist
+
+
+  if (typeof obj[key] === 'undefined') {
+    // look ahead to the next key. If it is a number, this prop is an array
+    obj[key] = typeof restPath[0] === 'number' ? [] : {};
+  }
+
+  obj[key] = setObject(obj[key], restPath, value);
+  return obj;
+}
+
+export function normalizeValidation(input) {
+  return Array.isArray(input) ? input : [input];
+}
+export function isChangeEvent(value) {
+  return typeof value === 'object' && value !== null && Reflect.has(value, 'target') && Reflect.has(value.target, 'value');
+}
+export function propagateErrors(fieldBag, errors) {
+  errors.forEach(error => {
+    if (error.field == null) {
+      return;
+    }
+
+    const got = get(fieldBag, error.field);
+
+    if (got && isField(got)) {
+      if (got.error !== error.message) {
+        got.setError(error.message);
+      }
+    }
+  });
+} // Reduce function similar to Array.reduce() for a tree-like FieldBag
+
+export function reduceFields(fieldBag, reduceFn, initialValue, reduceEmptyFn = value => value) {
+  return function reduceField(accumulator, item, path) {
+    if (isField(item)) {
+      return reduceFn(accumulator, item, path, fieldBag);
+    }
+
+    if (Array.isArray(item) && item.length) {
+      return item.reduce((_accumulator, value, index) => reduceField(_accumulator, value, path.concat(index)), accumulator);
+    }
+
+    if (typeof item === 'object' && item !== null) {
+      const entries = Object.entries(item);
+
+      if (entries.length) {
+        return entries.reduce((_accumulator, [key, value]) => reduceField(_accumulator, value, path.concat(key)), accumulator);
+      }
+    } // item is empty array, empty object, or primitive
+
+
+    return reduceEmptyFn(accumulator, item, path, fieldBag);
+  }(initialValue, fieldBag, []);
+}
+export function fieldsToArray(fieldBag) {
+  return reduceFields(fieldBag, (fields, field) => fields.concat(field), []);
+}
+export function validateAll(fieldBag) {
+  return reduceFields(fieldBag, (errors, field) => {
+    const message = field.runValidation();
+    return message ? errors.concat({
+      message
+    }) : errors;
+  }, []);
+}
+export function getValues(fieldBag) {
+  return reduceFields(fieldBag, (formValue, field, path) => setObject(formValue, path, field.value), {}, (formValue, value, path) => setObject(formValue, path, value));
+}
+export function noop() {}
+export function shallowArrayComparison(arrA, arrB) {
+  if (arrA === arrB) {
+    return true;
+  }
+
+  if (!arrA || !arrB) {
+    return false;
+  }
+
+  const len = arrA.length;
+
+  if (arrB.length !== len) {
+    return false;
+  }
+
+  for (let i = 0; i < len; i++) {
+    if (arrA[i] !== arrB[i]) {
+      return false;
+    }
+  }
+
+  return true;
+}
+export function defaultDirtyComparator(defaultValue, newValue) {
+  return Array.isArray(defaultValue) ? !shallowArrayComparison(defaultValue, newValue) : defaultValue !== newValue;
+}
+export function makeCleanFields(fieldBag) {
+  reduceFields(fieldBag, (_, field) => field.newDefaultValue(field.value));
+}

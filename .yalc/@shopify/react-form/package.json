@@ -1,0 +1,55 @@
+{
+  "name": "@shopify/react-form",
+  "version": "0.12.7+a7720b3a",
+  "license": "MIT",
+  "description": "Manage React forms tersely and safely-typed with no magic using React hooks",
+  "main": "index.js",
+  "types": "index.d.ts",
+  "scripts": {
+    "build": "tsc --p tsconfig.json"
+  },
+  "sideEffects": false,
+  "publishConfig": {
+    "access": "public",
+    "@shopify:registry": "https://registry.npmjs.org"
+  },
+  "author": "Shopify Inc.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Shopify/quilt.git",
+    "directory": "packages/react-form"
+  },
+  "bugs": {
+    "url": "https://github.com/Shopify/quilt/issues"
+  },
+  "homepage": "https://github.com/Shopify/quilt/blob/main/packages/react-form/README.md",
+  "peerDependencies": {
+    "react": ">=16.8.0 <17.0.0"
+  },
+  "files": [
+    "build/*",
+    "!*.tsbuildinfo",
+    "index.js",
+    "index.mjs",
+    "index.esnext",
+    "index.d.ts"
+  ],
+  "dependencies": {
+    "@shopify/predicates": "^1.3.3",
+    "@shopify/react-hooks": "^1.13.0",
+    "fast-deep-equal": "^3.1.3",
+    "get-value": "^3.0.1",
+    "tslib": "^1.14.1"
+  },
+  "module": "index.mjs",
+  "esnext": "index.esnext",
+  "exports": {
+    "./": "./",
+    ".": {
+      "import": "./index.mjs",
+      "require": "./index.js",
+      "esnext": "./index.esnext"
+    }
+  },
+  "yalcSig": "a7720b3abe3841705e01f58aa4761985"
+}
