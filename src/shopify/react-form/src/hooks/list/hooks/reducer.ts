@@ -245,6 +245,7 @@ function reduceList<Item extends object>(
       return {...state, list: [...state.list]};
     }
     case 'resetList': {
+      console.log('A: resetList');
       return {...state, list: state.initial.map(initialListItemState)}
     }
     case 'update':
