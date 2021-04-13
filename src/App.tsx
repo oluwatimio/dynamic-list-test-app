@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import {useDynamicList, useForm, useField} from './shopify/react-form/src';
 import {TextField, AppProvider, Button, Form, FormLayout, PageActions, Page} from '@shopify/polaris'
 import '@shopify/polaris/dist/styles.css';
@@ -14,12 +14,12 @@ function App() {
     cvv: '',
   })
 
-  const {fields: list, addItem, removeItem, reset: resetList, dirty: listDirty} = useDynamicList([{cardNumber: '4234 6738 8920 8902', cvv: '422'}, {cardNumber: '4234 6738 8920 8902', cvv: '422'}], emptyCardFactory);
-
-  const {submit, dirty, submitting, fields: {title, list: dynamicList}, reset} = useForm({
+  const {submit, dirty, submitting, lists, reset, fields: {title}} = useForm({
     fields: {
-      list,
       title: useField(''),
+    },
+    lists: {
+        dynamicList: useDynamicList<Card>([{cardNumber: '4234 6738 8920 8902', cvv: '422'}, {cardNumber: '4234 6738 8920 8902', cvv: '422'}], emptyCardFactory),
     },
     onSubmit: async fieldValues => {
       console.log(fieldValues);
@@ -27,12 +27,16 @@ function App() {
       return {status: 'success'};
     }
   })
-  return (
+
+  const {dynamicList: {addItem, removeItem, fields: dynamicListFields}} = lists!
+
+
+    return (
       <AppProvider i18n={{}}>
         <Page title="Customer Payment Info">
           <Form onSubmit={submit}>
             <FormLayout>
-              {dynamicList.map((field, index) => (
+              {dynamicListFields.map((field, index) => (
                   <FormLayout.Group key={index}>
                     <TextField placeholder="Card Number" label="Card Number" value={field.cardNumber.value} onChange={field.cardNumber.onChange}/>
                     <TextField placeholder="CVV" label="CVV" value={field.cvv.value} onChange={field.cvv.onChange} key={index}/>
@@ -62,10 +66,9 @@ function App() {
                     content: 'Reset',
                     onAction: () => {
                         reset();
-                        resetList();
                     },
                     accessibilityLabel: 'Reset',
-                    disabled: !dirty && !listDirty
+                    disabled: !dirty
                   },
                 ]}
             />
