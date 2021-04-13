@@ -93,6 +93,15 @@ export function useBaseList<Item extends object>(
     });
   }, [state.list, handlers]);
 
+
+  const listWithoutFieldStates: Item[] = useMemo(() => {
+    return state.list.map(item => {
+      return mapObject(item, field => {
+        return field.value;
+      });
+    });
+  }, [state.list]);
+
   const fieldsDirty = fields.some((field) => {
 
     const keys: [keyof Item] = Object.keys(field) as [keyof Item]
@@ -100,7 +109,7 @@ export function useBaseList<Item extends object>(
     return keys.some((key) => field[key].dirty)
   })
 
-  const dirty = fieldsDirty || (state.list.length !== state.initial.length)
+  const dirty = fieldsDirty || !isEqual(listWithoutFieldStates, state.initial)
 
   return {fields, dispatch, reset, dirty};
 }
