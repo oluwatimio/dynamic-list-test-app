@@ -104,9 +104,9 @@ export function useBaseList<Item extends object>(
 
   const fieldsDirty = fields.some((field) => {
 
-    const keys: [keyof Item] = Object.keys(field) as [keyof Item]
-
-    return keys.some((key) => field[key].dirty)
+    return Object.entries(field).some(
+        ([key, value]) => key === 'dirty' && value,
+    );
   })
 
   const dirty = fieldsDirty || !isEqual(listWithoutFieldStates, state.initial)
