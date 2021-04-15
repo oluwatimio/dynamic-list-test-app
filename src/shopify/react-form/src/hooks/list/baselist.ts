@@ -16,6 +16,7 @@ import {
   reinitializeAction,
   resetListAction,
 } from './hooks';
+import {useDirty} from "../dirty";
 
 /*
 
@@ -102,14 +103,14 @@ export function useBaseList<Item extends object>(
     });
   }, [state.list]);
 
-  const fieldsDirty = fields.some((field) => {
+  const isBaseListDirty = useMemo(
+      () => !isEqual(listWithoutFieldStates, state.initial),
+      [listWithoutFieldStates, state.initial],
+  );
 
-    return Object.entries(field).some(
-        ([key, value]) => key === 'dirty' && value,
-    );
-  })
+  const fieldsDirty = useDirty({fields})
 
-  const dirty = fieldsDirty || !isEqual(listWithoutFieldStates, state.initial)
+  const dirty = fieldsDirty || isBaseListDirty;
 
   return {fields, dispatch, reset, dirty};
 }

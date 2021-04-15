@@ -1,13 +1,13 @@
 import {useCallback, useMemo, useRef} from 'react';
 
-import {SubmitHandler, FormMapping, FieldBag, Form, ListBag} from '../types';
+import {SubmitHandler, FormMapping, FieldBag, Form, ListBag, DynamicListBag} from '../types';
 import {validateAll, makeCleanFields} from '../utilities';
 
 import {useDirty} from './dirty';
 import {useReset} from './reset';
 import {useSubmit} from './submit';
-import {useListReset} from './listreset';
-import { useListDirty } from "./listdirty";
+import {useDynamicListReset} from './dynamiclistreset';
+import {useDynamicListDirty} from "./dynamiclistdirty";
 
 /**
  * A custom hook for managing the state of an entire form. `useForm` wraps up many of the other hooks in this package in one API, and when combined with `useField` and `useList`, allows you to easily build complex forms with smart defaults for common cases.
@@ -67,33 +67,42 @@ import { useListDirty } from "./listdirty";
 export function useForm<T extends FieldBag>({
                                               fields,
                                               onSubmit,
-                                              lists,
+                                              dynamicLists,
                                               makeCleanAfterSubmit = false,
                                             }: {
   fields: T;
   onSubmit?: SubmitHandler<FormMapping<T, 'value'>>;
   makeCleanAfterSubmit?: boolean;
-  lists?: ListBag;
+  dynamicLists?: DynamicListBag;
 }): Form<T> {
-  const fieldWithList = {...fields, dynamicListFields: lists?.dynamicList.fields};
-  const dirty = useDirty(fieldWithList);
-  const listDirty = useListDirty(lists);
-  const basicReset = useReset(fieldWithList);
-  const listReset = useListReset(lists);
+
+  const fieldsWithLists =  useMemo(() => {
+    let fieldsWithList = {...fields};
+    if (dynamicLists) {
+      Object.entries(dynamicLists).forEach(([key, value]) => {
+        (fieldsWithList as any)[key] = value.fields;
+      })
+    }
+    return fieldsWithList;
+  }, [dynamicLists])
+  const dirty = useDirty(fieldsWithLists);
+  const dynamicListDirty = useDynamicListDirty(dynamicLists);
+  const basicReset = useReset(fieldsWithLists);
+  const dynamicListReset = useDynamicListReset(dynamicLists);
   const {submit, submitting, errors, setErrors} = useSubmit(
       onSubmit,
-      fieldWithList,
+      fieldsWithLists,
       makeCleanAfterSubmit,
   );
 
   const reset = useCallback(() => {
     setErrors([]);
     basicReset();
-    listReset();
-  }, [basicReset, listReset, setErrors]);
+    dynamicListReset();
+  }, [basicReset, dynamicListReset, setErrors]);
 
-  const fieldsRef = useRef(fieldWithList);
-  fieldsRef.current = fieldWithList;
+  const fieldsRef = useRef(fieldsWithLists);
+  fieldsRef.current = fieldsWithLists;
 
   const validate = useCallback(() => {
     return validateAll(fieldsRef.current);
@@ -105,13 +114,13 @@ export function useForm<T extends FieldBag>({
 
   return {
     fields,
-    dirty: dirty || listDirty,
+    dirty: dirty || dynamicListDirty,
     submitting,
     submit,
     reset,
     validate,
     makeClean,
     submitErrors: errors,
-    lists,
+    dynamicLists,
   };
 }

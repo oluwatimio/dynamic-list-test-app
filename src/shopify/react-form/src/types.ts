@@ -73,7 +73,7 @@ export interface Form<T extends FieldBag> {
   reset(): void;
   submit(event?: React.FormEvent): void;
   makeClean(): void;
-  lists?: ListBag;
+  dynamicLists?: DynamicListBag;
 }
 
 export interface FormError {
@@ -103,6 +103,11 @@ export interface ListBag {
   dynamicList: DynamicList<any>
 }
 
+export type DynamicListOutput<V extends object> = DynamicList<V>;
+
+export interface DynamicListBag {
+  [key: string]: DynamicListOutput<any>;
+}
 export interface SubmitHandler<Fields> {
   (fields: Fields): Promise<SubmitResult>;
 }

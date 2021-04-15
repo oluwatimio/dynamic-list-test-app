@@ -14,12 +14,13 @@ function App() {
     cvv: '',
   })
 
-  const {submit, dirty, submitting, lists, reset, fields: {title}} = useForm({
+  const {submit, dirty, submitting, dynamicLists, reset, fields: {title}} = useForm({
     fields: {
       title: useField(''),
     },
-    lists: {
-        dynamicList: useDynamicList<Card>([{cardNumber: '4234 6738 8920 8902', cvv: '422'}, {cardNumber: '4234 6738 8920 8902', cvv: '422'}], emptyCardFactory),
+    dynamicLists: {
+        fulfillments: useDynamicList<Card>([{cardNumber: '4234 6738 8920 8902', cvv: '422'}, {cardNumber: '4234 6738 8920 8902', cvv: '422'}], emptyCardFactory),
+        punta: useDynamicList<Card>([{cardNumber: '4234 6738 8920 8902', cvv: '422'}, {cardNumber: '4234 6738 8920 8902', cvv: '422'}], emptyCardFactory)
     },
     onSubmit: async fieldValues => {
       console.log(fieldValues);
@@ -28,7 +29,8 @@ function App() {
     }
   })
 
-  const {dynamicList: {addItem, removeItem, fields: dynamicListFields}} = lists!
+  const {fulfillments: {addItem, removeItem, fields: fulfillmentFields}} = dynamicLists!
+    const {punta: { addItem: addPuntaFields, fields: puntaFields}} = dynamicLists!
 
 
     return (
@@ -36,7 +38,7 @@ function App() {
         <Page title="Customer Payment Info">
           <Form onSubmit={submit}>
             <FormLayout>
-              {dynamicListFields.map((field, index) => (
+              {fulfillmentFields.map((field, index) => (
                   <FormLayout.Group key={index}>
                     <TextField placeholder="Card Number" label="Card Number" value={field.cardNumber.value} onChange={field.cardNumber.onChange}/>
                     <TextField placeholder="CVV" label="CVV" value={field.cvv.value} onChange={field.cvv.onChange} key={index}/>
@@ -47,6 +49,18 @@ function App() {
               ))}
               <Button onClick={() => addItem ? addItem('10') : null}>Add Card</Button>
             </FormLayout>
+              <FormLayout>
+                  {puntaFields.map((field, index) => (
+                      <FormLayout.Group key={index}>
+                          <TextField placeholder="Card Number" label="Card Number" value={field.cardNumber.value} onChange={field.cardNumber.onChange}/>
+                          <TextField placeholder="CVV" label="CVV" value={field.cvv.value} onChange={field.cvv.onChange} key={index}/>
+                          <div style={{marginTop: '23px'}}>
+                              <Button onClick={() => removeItem ? removeItem(index) : null}>Remove</Button>
+                          </div>
+                      </FormLayout.Group>
+                  ))}
+                  <Button onClick={() => addPuntaFields ? addPuntaFields('10') : null}>Add Card</Button>
+              </FormLayout>
             <TextField
                 placeholder ="some-field"
                 label="Additional Field"
