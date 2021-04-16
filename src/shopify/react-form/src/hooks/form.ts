@@ -1,13 +1,20 @@
-import {useCallback, useMemo, useRef} from 'react';
+import {useCallback, useMemo} from 'react';
+import {useLazyRef} from '@shopify/react-hooks';
 
-import {SubmitHandler, FormMapping, FieldBag, Form, ListBag, DynamicListBag} from '../types';
+import {
+  SubmitHandler,
+  FormMapping,
+  FieldBag,
+  Form,
+  DynamicListBag,
+} from '../types';
 import {validateAll, makeCleanFields} from '../utilities';
 
 import {useDirty} from './dirty';
 import {useReset} from './reset';
 import {useSubmit} from './submit';
-import {useDynamicListReset} from './dynamiclistreset';
 import {useDynamicListDirty} from "./dynamiclistdirty";
+import {useDynamicListReset} from "./dynamiclistreset";
 
 /**
  * A custom hook for managing the state of an entire form. `useForm` wraps up many of the other hooks in this package in one API, and when combined with `useField` and `useList`, allows you to easily build complex forms with smart defaults for common cases.
@@ -75,20 +82,22 @@ export function useForm<T extends FieldBag>({
   makeCleanAfterSubmit?: boolean;
   dynamicLists?: DynamicListBag;
 }): Form<T> {
-
-  const fieldsWithLists =  useMemo(() => {
-    let fieldsWithList = {...fields};
+  const fieldsWithLists = useMemo(() => {
+    const fieldsWithList = {...fields};
     if (dynamicLists) {
       Object.entries(dynamicLists).forEach(([key, value]) => {
         (fieldsWithList as any)[key] = value.fields;
-      })
+      });
     }
     return fieldsWithList;
-  }, [dynamicLists])
+  }, [dynamicLists, fields]);
+
   const dirty = useDirty(fieldsWithLists);
-  const dynamicListDirty = useDynamicListDirty(dynamicLists);
   const basicReset = useReset(fieldsWithLists);
+
+  const dynamicListDirty = useDynamicListDirty(dynamicLists);
   const dynamicListReset = useDynamicListReset(dynamicLists);
+
   const {submit, submitting, errors, setErrors} = useSubmit(
       onSubmit,
       fieldsWithLists,
@@ -101,7 +110,7 @@ export function useForm<T extends FieldBag>({
     dynamicListReset();
   }, [basicReset, dynamicListReset, setErrors]);
 
-  const fieldsRef = useRef(fieldsWithLists);
+  const fieldsRef = useLazyRef(() => fieldsWithLists);
   fieldsRef.current = fieldsWithLists;
 
   const validate = useCallback(() => {
