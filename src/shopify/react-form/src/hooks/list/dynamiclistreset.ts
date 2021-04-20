@@ -1,6 +1,6 @@
 import {useCallback} from 'react';
 import {useLazyRef} from '@shopify/react-hooks';
-import {DynamicListBag} from "../types";
+import {DynamicListBag} from "../../types";
 
 export function useDynamicListReset(lists?: DynamicListBag) {
   const listBagRef = useLazyRef(() => lists);

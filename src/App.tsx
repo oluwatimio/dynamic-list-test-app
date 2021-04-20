@@ -30,7 +30,7 @@ function App() {
   })
 
   const {fulfillments: {addItem, removeItem, fields: fulfillmentFields}} = dynamicLists
-    const {punta: { addItem: addPuntaFields, fields: puntaFields}} = dynamicLists
+    const {punta: { addItem: addPuntaFields, removeItem: removePuntaFields, fields: puntaFields}} = dynamicLists
 
 
     return (
@@ -43,11 +43,11 @@ function App() {
                     <TextField placeholder="Card Number" label="Card Number" value={field.cardNumber.value} onChange={field.cardNumber.onChange}/>
                     <TextField placeholder="CVV" label="CVV" value={field.cvv.value} onChange={field.cvv.onChange} key={index}/>
                     <div style={{marginTop: '23px'}}>
-                      <Button onClick={() => removeItem ? removeItem(index) : null}>Remove</Button>
+                      <Button onClick={() => removeItem(index)}>Remove</Button>
                     </div>
                   </FormLayout.Group>
               ))}
-              <Button onClick={() => addItem ? addItem('10') : null}>Add Card</Button>
+              <Button onClick={() => addItem('10')}>Add Card</Button>
             </FormLayout>
               <FormLayout>
                   {puntaFields.map((field, index) => (
@@ -55,11 +55,11 @@ function App() {
                           <TextField placeholder="Card Number" label="Card Number" value={field.cardNumber.value} onChange={field.cardNumber.onChange}/>
                           <TextField placeholder="CVV" label="CVV" value={field.cvv.value} onChange={field.cvv.onChange} key={index}/>
                           <div style={{marginTop: '23px'}}>
-                              <Button onClick={() => removeItem ? removeItem(index) : null}>Remove</Button>
+                              <Button onClick={() => removePuntaFields(index)}>Remove</Button>
                           </div>
                       </FormLayout.Group>
                   ))}
-                  <Button onClick={() => addPuntaFields ? addPuntaFields('10') : null}>Add Card</Button>
+                  <Button onClick={() => addPuntaFields('10')}>Add Card</Button>
               </FormLayout>
             <TextField
                 placeholder ="some-field"
