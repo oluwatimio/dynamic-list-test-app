@@ -29,8 +29,8 @@ function App() {
     }
   })
 
-  const {fulfillments: {addItem, removeItem, fields: fulfillmentFields}} = dynamicLists!
-    const {punta: { addItem: addPuntaFields, fields: puntaFields}} = dynamicLists!
+  const {fulfillments: {addItem, removeItem, fields: fulfillmentFields}} = dynamicLists
+    const {punta: { addItem: addPuntaFields, fields: puntaFields}} = dynamicLists
 
 
     return (
