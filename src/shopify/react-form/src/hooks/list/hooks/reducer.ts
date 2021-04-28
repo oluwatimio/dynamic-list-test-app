@@ -181,6 +181,7 @@ function reduceList<Item extends object>(
   switch (action.type) {
     case 'reinitialize': {
       return {
+        ...state,
         initial: action.payload.list,
         list: action.payload.list.map(initialListItemState),
       };

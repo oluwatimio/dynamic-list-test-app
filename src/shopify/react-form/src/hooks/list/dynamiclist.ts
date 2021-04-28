@@ -14,10 +14,13 @@ export interface DynamicList<Item extends object> {
   moveItem(fromIndex: number, toIndex: number): void;
   reset(): void;
   dirty: boolean;
+  value: Item[];
+  defaultValue: Item[];
+  newDefaultValue(newDefaultItems: Item[]): void;
 }
 
 type FactoryFunction<Item extends object> = (
-  factoryArgument?: any,
+    factoryArgument?: any,
 ) => Item | Item[];
 
 /*
@@ -30,11 +33,14 @@ type FactoryFunction<Item extends object> = (
 */
 
 export function useDynamicList<Item extends object>(
-  listOrConfig: FieldListConfig<Item> | Item[],
-  fieldFactory: FactoryFunction<Item>,
-  validationDependencies: unknown[] = [],
+    listOrConfig: FieldListConfig<Item> | Item[],
+    fieldFactory: FactoryFunction<Item>,
+    validationDependencies: unknown[] = [],
 ): DynamicList<Item> {
-  const {fields, dispatch, reset, dirty} = useBaseList(listOrConfig, validationDependencies);
+  const {fields, dispatch, reset, dirty, newDefaultValue, value, defaultValue} = useBaseList(
+      listOrConfig,
+      validationDependencies,
+  );
 
   function addItem(factoryArgument?: any) {
     const itemToAdd = fieldFactory(factoryArgument);
@@ -54,5 +60,15 @@ export function useDynamicList<Item extends object>(
     dispatch(removeFieldItemAction(index));
   }
 
-  return {fields, addItem, removeItem, moveItem, reset, dirty};
+  return {
+    fields,
+    addItem,
+    removeItem,
+    moveItem,
+    reset,
+    dirty,
+    value,
+    newDefaultValue,
+    defaultValue,
+  };
 }

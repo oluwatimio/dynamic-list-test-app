@@ -1,3 +1,4 @@
+// @ts-nocheck
 import {ChangeEvent} from 'react';
 import get from 'get-value';
 
@@ -8,21 +9,22 @@ import {
   FieldBag,
   FormMapping,
   Field,
-  FormError,
-} from './types';
+  FormError, DynamicListBag
+} from "./types";
 
 export function isField<T extends Object>(input: any): input is Field<T> {
   return (
-    Object.prototype.hasOwnProperty.call(input, 'value') &&
-    Object.prototype.hasOwnProperty.call(input, 'onChange') &&
-    Object.prototype.hasOwnProperty.call(input, 'onBlur') &&
-    Object.prototype.hasOwnProperty.call(input, 'defaultValue')
+      Boolean(input) &&
+      Object.prototype.hasOwnProperty.call(input, 'value') &&
+      Object.prototype.hasOwnProperty.call(input, 'onChange') &&
+      Object.prototype.hasOwnProperty.call(input, 'onBlur') &&
+      Object.prototype.hasOwnProperty.call(input, 'defaultValue')
   );
 }
 
 export function mapObject<Output>(
-  input: any,
-  mapper: (value: any, key: any) => any,
+    input: any,
+    mapper: (value: any, key: any) => any,
 ) {
   return Object.keys(input).reduce((accumulator: any, key) => {
     const value = input[key];
@@ -33,9 +35,9 @@ export function mapObject<Output>(
 
 // Eg: set({a: 1}, ['b', 'c'], 2) // => {a: 1, b: {c: 2}}
 function setObject<T extends Object>(
-  obj: T,
-  path: (string | number)[],
-  value: any,
+    obj: T,
+    path: (string | number)[],
+    value: any,
 ): T {
   const [key, ...restPath] = path;
   if (key == null || obj === null || typeof obj !== 'object') {
@@ -43,43 +45,40 @@ function setObject<T extends Object>(
   }
 
   if (!restPath.length) {
-    // @ts-ignore
     obj[key] = value;
     return obj;
   }
 
   // creates prop if it doesn't exist
-  // @ts-ignore
   if (typeof obj[key] === 'undefined') {
     // look ahead to the next key. If it is a number, this prop is an array
-    // @ts-ignore
     obj[key] = typeof restPath[0] === 'number' ? [] : {};
   }
-  // @ts-ignore
+
   obj[key] = setObject(obj[key], restPath, value);
   return obj;
 }
 
 export function normalizeValidation<Value, Context extends object = {}>(
-  input: Validates<Value, Context>,
+    input: Validates<Value, Context>,
 ): Validator<Value, Context>[] {
   return Array.isArray(input) ? input : [input];
 }
 
 export function isChangeEvent(
-  value: any,
+    value: any,
 ): value is ChangeEvent<HTMLInputElement> {
   return (
-    typeof value === 'object' &&
-    value !== null &&
-    Reflect.has(value, 'target') &&
-    Reflect.has(value.target, 'value')
+      typeof value === 'object' &&
+      value !== null &&
+      Reflect.has(value, 'target') &&
+      Reflect.has(value.target, 'value')
   );
 }
 
 export function propagateErrors(
-  fieldBag: {[key: string]: FieldOutput<any>},
-  errors: FormError[],
+    fieldBag: {[key: string]: FieldOutput<any>},
+    errors: FormError[],
 ) {
   errors.forEach(error => {
     if (error.field == null) {
@@ -98,25 +97,25 @@ export function propagateErrors(
 
 // Reduce function similar to Array.reduce() for a tree-like FieldBag
 export function reduceFields<V>(
-  fieldBag: FieldBag,
-  reduceFn: (
-    accumulator: V,
-    currentField: Field<any>,
-    path: (string | number)[],
     fieldBag: FieldBag,
-  ) => V,
-  initialValue?: V,
-  reduceEmptyFn: (
-    accumulator: V,
-    value: any,
-    path: (string | number)[],
-    fieldBag: FieldBag,
-  ) => V = value => value,
+    reduceFn: (
+        accumulator: V,
+        currentField: Field<any>,
+        path: (string | number)[],
+        fieldBag: FieldBag,
+    ) => V,
+    initialValue?: V,
+    reduceEmptyFn: (
+        accumulator: V,
+        value: any,
+        path: (string | number)[],
+        fieldBag: FieldBag,
+    ) => V = value => value,
 ) {
   return (function reduceField(
-    accumulator: V,
-    item: FieldBag | FieldOutput<any>,
-    path: (string | number)[],
+      accumulator: V,
+      item: FieldBag | FieldOutput<any>,
+      path: (string | number)[],
   ): V {
     if (isField(item)) {
       return reduceFn(accumulator, item, path, fieldBag);
@@ -124,9 +123,9 @@ export function reduceFields<V>(
 
     if (Array.isArray(item) && item.length) {
       return item.reduce(
-        (_accumulator: V, value, index) =>
-          reduceField(_accumulator, value, path.concat(index)),
-        accumulator,
+          (_accumulator: V, value, index) =>
+              reduceField(_accumulator, value, path.concat(index)),
+          accumulator,
       );
     }
 
@@ -134,9 +133,9 @@ export function reduceFields<V>(
       const entries = Object.entries(item);
       if (entries.length) {
         return entries.reduce(
-          (_accumulator: V, [key, value]) =>
-            reduceField(_accumulator, value, path.concat(key)),
-          accumulator,
+            (_accumulator: V, [key, value]) =>
+                reduceField(_accumulator, value, path.concat(key)),
+            accumulator,
         );
       }
     }
@@ -148,29 +147,29 @@ export function reduceFields<V>(
 
 export function fieldsToArray(fieldBag: FieldBag) {
   return reduceFields<Field<any>[]>(
-    fieldBag,
-    (fields, field) => fields.concat(field),
-    [],
+      fieldBag,
+      (fields, field) => fields.concat(field),
+      [],
   );
 }
 
 export function validateAll(fieldBag: FieldBag) {
   return reduceFields<FormError[]>(
-    fieldBag,
-    (errors, field) => {
-      const message = field.runValidation();
-      return message ? errors.concat({message}) : errors;
-    },
-    [],
+      fieldBag,
+      (errors, field) => {
+        const message = field.runValidation();
+        return message ? errors.concat({message}) : errors;
+      },
+      [],
   );
 }
 
 export function getValues<T extends FieldBag>(fieldBag: T) {
   return reduceFields<FormMapping<T, 'value'>>(
-    fieldBag,
-    (formValue, field, path) => setObject(formValue, path, field.value),
-    {} as any,
-    (formValue, value, path) => setObject(formValue, path, value),
+      fieldBag,
+      (formValue, field, path) => setObject(formValue, path, field.value),
+      {} as any,
+      (formValue, value, path) => setObject(formValue, path, value),
   );
 }
 
@@ -201,14 +200,25 @@ export function shallowArrayComparison(arrA: unknown[], arrB: any) {
 }
 
 export function defaultDirtyComparator<Value>(
-  defaultValue: Value,
-  newValue: Value,
+    defaultValue: Value,
+    newValue: Value,
 ): boolean {
   return Array.isArray(defaultValue)
-    ? !shallowArrayComparison(defaultValue, newValue)
-    : defaultValue !== newValue;
+      ? !shallowArrayComparison(defaultValue, newValue)
+      : defaultValue !== newValue;
 }
 
 export function makeCleanFields(fieldBag: FieldBag) {
   reduceFields(fieldBag, (_, field) => field.newDefaultValue(field.value));
+}
+
+export function makeCleanDynamicList(dynamicLists?: DynamicListBag) {
+  if (dynamicLists) {
+    Object.entries(dynamicLists).forEach(([key]) => {
+      console.log(dynamicLists[key].value);
+      dynamicLists[key].newDefaultValue(dynamicLists[key].value);
+      console.log(dynamicLists[key].dirty)
+      console.log(dynamicLists[key].fields)
+    });
+  }
 }

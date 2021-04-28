@@ -1,10 +1,11 @@
 import {ChangeEvent} from 'react';
-import {DynamicList} from "./hooks/list/dynamiclist";
+
+import {DynamicList} from './hooks/list/dynamiclist';
 
 export type ErrorValue = string | undefined;
 export type DirtyStateComparator<Value> = (
-  defaultValue: Value,
-  value: Value,
+    defaultValue: Value,
+    value: Value,
 ) => boolean;
 
 export interface Validator<Value, Context> {
@@ -17,20 +18,20 @@ export interface ListValidationContext<Item extends object> {
 }
 
 export type Validates<Value, Context extends object = {}> =
-  | Validator<Value, Context>
-  | Validator<Value, Context>[];
+    | Validator<Value, Context>
+    | Validator<Value, Context>[];
 
 export type NormalizedValidationDictionary<ListItem extends object> = {
   [Key in keyof ListItem]: Validator<
-    ListItem[Key],
-    ListValidationContext<ListItem>
-  >[];
+      ListItem[Key],
+      ListValidationContext<ListItem>
+      >[];
 };
 
 export type ValidationDictionary<
-  ListItem extends object,
-  Context extends object = {}
-> = {[Key in keyof ListItem]: Validates<ListItem[Key], Context>};
+    ListItem extends object,
+    Context extends object = {}
+    > = {[Key in keyof ListItem]: Validates<ListItem[Key], Context>};
 
 export interface FieldState<Value> {
   value: Value;
@@ -64,6 +65,24 @@ export type FieldDictionary<Record extends object> = {
   [Key in keyof Record]: Field<Record[Key]>;
 };
 
+export interface FormWithoutDynamicListsInput<T extends FieldBag> {
+  fields: T;
+  onSubmit?: SubmitHandler<FormMapping<T, 'value'>>;
+  makeCleanAfterSubmit?: boolean;
+}
+
+export interface FormWithDynamicListsInput<
+    T extends FieldBag,
+    D extends DynamicListBag
+    > extends FormWithoutDynamicListsInput<T> {
+  dynamicLists: D;
+}
+
+export interface FormInput<T extends FieldBag, D extends DynamicListBag>
+    extends FormWithoutDynamicListsInput<T> {
+  dynamicLists?: D;
+}
+
 export interface Form<T extends FieldBag> {
   fields: T;
   dirty: boolean;
@@ -73,7 +92,13 @@ export interface Form<T extends FieldBag> {
   reset(): void;
   submit(event?: React.FormEvent): void;
   makeClean(): void;
-  dynamicLists: DynamicListBag;
+}
+
+export interface FormWithDynamicLists<
+    T extends FieldBag,
+    D extends DynamicListBag
+    > extends Form<T> {
+  dynamicLists: D;
 }
 
 export interface FormError {
@@ -82,25 +107,21 @@ export interface FormError {
 }
 
 export type SubmitResult =
-  | {
-      status: 'fail';
-      errors: FormError[];
-    }
-  | {
-      status: 'success';
-    };
+    | {
+  status: 'fail';
+  errors: FormError[];
+}
+    | {
+  status: 'success';
+};
 
 export type FieldOutput<T extends object> =
-  | FieldDictionary<T>
-  | Field<T>
-  | FieldDictionary<T>[]
+    | FieldDictionary<T>
+    | Field<T>
+    | FieldDictionary<T>[];
 
 export interface FieldBag {
   [key: string]: FieldOutput<any>;
-}
-
-export interface ListBag {
-  dynamicList: DynamicList<any>
 }
 
 export type DynamicListOutput<V extends object> = DynamicList<V>;
@@ -108,24 +129,25 @@ export type DynamicListOutput<V extends object> = DynamicList<V>;
 export interface DynamicListBag {
   [key: string]: DynamicListOutput<any>;
 }
+
 export interface SubmitHandler<Fields> {
   (fields: Fields): Promise<SubmitResult>;
 }
 
 type FieldProp<T, K extends keyof Field<any>> = T extends Field<any>
-  ? T[K]
-  : T extends FieldDictionary<any>
-  ? {[InnerKey in keyof T]: T[InnerKey][K]}
-  : T;
+    ? T[K]
+    : T extends FieldDictionary<any>
+        ? {[InnerKey in keyof T]: T[InnerKey][K]}
+        : T;
 
 /**
-  Represents all of the values for a given key mapped out of a mixed dictionary of Field objects,
-  nested Field objects, and arrays of nested Field objects.
+ Represents all of the values for a given key mapped out of a mixed dictionary of Field objects,
+ nested Field objects, and arrays of nested Field objects.
 
-  This is generally only useful if you're mapping over and transforming a nested tree of fields.
-*/
+ This is generally only useful if you're mapping over and transforming a nested tree of fields.
+ */
 export type FormMapping<Bag, FieldKey extends keyof Field<any>> = {
   [Key in keyof Bag]: Bag[Key] extends any[]
-    ? FieldProp<Bag[Key][number], FieldKey>[]
-    : FieldProp<Bag[Key], FieldKey>;
+      ? FieldProp<Bag[Key][number], FieldKey>[]
+      : FieldProp<Bag[Key], FieldKey>;
 };

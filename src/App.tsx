@@ -22,6 +22,7 @@ function App() {
         fulfillments: useDynamicList<Card>([{cardNumber: '4234 6738 8920 8902', cvv: '422'}, {cardNumber: '4234 6738 8920 8902', cvv: '422'}], emptyCardFactory),
         punta: useDynamicList<Card>([{cardNumber: '4234 6738 8920 8902', cvv: '422'}, {cardNumber: '4234 6738 8920 8902', cvv: '422'}], emptyCardFactory)
     },
+      makeCleanAfterSubmit: true,
     onSubmit: async fieldValues => {
       console.log(fieldValues);
 

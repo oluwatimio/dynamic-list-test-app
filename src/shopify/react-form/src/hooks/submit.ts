@@ -2,71 +2,75 @@ import {useState, useCallback, useRef} from 'react';
 import {useMountedRef} from '@shopify/react-hooks';
 
 import {
-  FormMapping,
-  SubmitHandler,
-  SubmitResult,
-  FieldBag,
-  FormError,
+    FormMapping,
+    SubmitHandler,
+    SubmitResult,
+    FieldBag,
+    FormError,
+    DynamicListBag,
 } from '../types';
 import {
-  propagateErrors,
-  validateAll,
-  getValues,
-  makeCleanFields,
+    propagateErrors,
+    validateAll,
+    getValues,
+    makeCleanFields,
+    makeCleanDynamicList,
 } from '../utilities';
 
 export function useSubmit<T extends FieldBag>(
-  onSubmit: SubmitHandler<FormMapping<T, 'value'>> = noopSubmission,
-  fieldBag: T,
-  makeCleanAfterSubmit = false,
+    onSubmit: SubmitHandler<FormMapping<T, 'value'>> = noopSubmission,
+    fieldBag: T,
+    makeCleanAfterSubmit = false,
+    dynamicLists?: DynamicListBag,
 ) {
-  const mounted = useMountedRef();
-  const [submitting, setSubmitting] = useState(false);
-  const [submitErrors, setSubmitErrors] = useState([] as FormError[]);
+    const mounted = useMountedRef();
+    const [submitting, setSubmitting] = useState(false);
+    const [submitErrors, setSubmitErrors] = useState([] as FormError[]);
 
-  const fieldBagRef = useRef(fieldBag);
-  fieldBagRef.current = fieldBag;
+    const fieldBagRef = useRef(fieldBag);
+    fieldBagRef.current = fieldBag;
 
-  const setErrors = useCallback((errors: FormError[]) => {
-    setSubmitErrors(errors);
-    propagateErrors(fieldBagRef.current, errors);
-  }, []);
+    const setErrors = useCallback((errors: FormError[]) => {
+        setSubmitErrors(errors);
+        propagateErrors(fieldBagRef.current, errors);
+    }, []);
 
-  const submit = useCallback(
-    async (event?: React.FormEvent) => {
-      const fields = fieldBagRef.current;
-      if (event && event.preventDefault && !event.defaultPrevented) {
-        event.preventDefault();
-      }
+    const submit = useCallback(
+        async (event?: React.FormEvent) => {
+            const fields = fieldBagRef.current;
+            if (event && event.preventDefault && !event.defaultPrevented) {
+                event.preventDefault();
+            }
 
-      const clientErrors = validateAll(fields);
-      if (clientErrors.length > 0) {
-        setErrors(clientErrors);
-        return;
-      }
+            const clientErrors = validateAll(fields);
+            if (clientErrors.length > 0) {
+                setErrors(clientErrors);
+                return;
+            }
 
-      setSubmitting(true);
-      const result = await onSubmit(getValues(fields));
+            setSubmitting(true);
+            const result = await onSubmit(getValues(fields));
 
-      if (mounted.current === false) {
-        return;
-      }
+            if (mounted.current === false) {
+                return;
+            }
 
-      setSubmitting(false);
+            setSubmitting(false);
 
-      if (result.status === 'fail') {
-        setErrors(result.errors);
-      } else {
-        setSubmitErrors([]);
-        if (makeCleanAfterSubmit) {
-          makeCleanFields(fields);
-        }
-      }
-    },
-    [mounted, onSubmit, setErrors, makeCleanAfterSubmit],
-  );
+            if (result.status === 'fail') {
+                setErrors(result.errors);
+            } else {
+                setSubmitErrors([]);
+                if (makeCleanAfterSubmit) {
+                    makeCleanFields(fields);
+                    makeCleanDynamicList(dynamicLists);
+                }
+            }
+        },
+        [onSubmit, mounted, setErrors, makeCleanAfterSubmit, dynamicLists],
+    );
 
-  return {submit, submitting, errors: submitErrors, setErrors};
+    return {submit, submitting, errors: submitErrors, setErrors};
 }
 
 /**
@@ -74,7 +78,7 @@ export function useSubmit<T extends FieldBag>(
  * @return Returns a `SubmitResult` representing your successful form submission.
  */
 export function submitSuccess(): SubmitResult {
-  return {status: 'success'};
+    return {status: 'success'};
 }
 
 /**
@@ -83,9 +87,9 @@ export function submitSuccess(): SubmitResult {
  * @return Returns a `SubmitResult` representing your failed form submission.
  */
 export function submitFail(errors: FormError[] = []): SubmitResult {
-  return {status: 'fail', errors};
+    return {status: 'fail', errors};
 }
 
 function noopSubmission(_: unknown): Promise<SubmitResult> {
-  return Promise.resolve(submitSuccess());
+    return Promise.resolve(submitSuccess());
 }

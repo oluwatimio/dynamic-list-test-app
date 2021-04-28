@@ -1,4 +1,4 @@
-import {useMemo, useEffect} from 'react';
+import {useMemo, useEffect, useState} from 'react';
 import isEqual from 'fast-deep-equal';
 
 import {
@@ -8,6 +8,7 @@ import {
   ListValidationContext,
 } from '../../types';
 import {mapObject, normalizeValidation} from '../../utilities';
+import {useDirty} from '../dirty';
 
 import {
   useHandlers,
@@ -16,7 +17,6 @@ import {
   reinitializeAction,
   resetListAction,
 } from './hooks';
-import {useDirty} from "../dirty";
 
 /*
 
@@ -46,39 +46,48 @@ interface BaseList<Item extends object> {
   dispatch: React.Dispatch<ListAction<Item>>;
   reset(): void;
   dirty: boolean;
+  defaultValue: Item[];
+  value: Item[];
+  newDefaultValue(newDefaultItems: Item[]): void;
 }
 
 export function useBaseList<Item extends object>(
-  listOrConfig: FieldListConfig<Item> | Item[],
-  validationDependencies: unknown[] = [],
+    listOrConfig: FieldListConfig<Item> | Item[],
+    validationDependencies: unknown[] = [],
 ): BaseList<Item> {
+  const [hasCleaned, setHasCleaned] = useState(false);
   const list = Array.isArray(listOrConfig) ? listOrConfig : listOrConfig.list;
   const validates: FieldListConfig<Item>['validates'] = Array.isArray(
-    listOrConfig,
+      listOrConfig,
   )
-    ? {}
-    : listOrConfig.validates || {};
+      ? {}
+      : listOrConfig.validates || {};
 
   const [state, dispatch] = useListReducer(list);
 
   useEffect(() => {
-    if (!isEqual(list, state.initial)) {
+    if (!isEqual(list, state.initial) && !hasCleaned) {
       dispatch(reinitializeAction(list));
     }
   }, [list, state.initial, dispatch]);
 
   const validationConfigs = useMemo(
-    () =>
-      mapObject<NormalizedValidationDictionary<any>>(
-        validates,
-        normalizeValidation,
-      ),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [validates, ...validationDependencies],
+      () =>
+          mapObject<NormalizedValidationDictionary<any>>(
+              validates,
+              normalizeValidation,
+          ),
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+      [validates, ...validationDependencies],
   );
 
-  function reset(){
+  function reset() {
     dispatch(resetListAction());
+  }
+
+  function newDefaultValue(newDefaultItems: Item[]) {
+    setHasCleaned(true);
+    dispatch(reinitializeAction(newDefaultItems));
   }
 
   const handlers = useHandlers(state, dispatch, validationConfigs);
@@ -94,12 +103,9 @@ export function useBaseList<Item extends object>(
     });
   }, [state.list, handlers]);
 
-
   const listWithoutFieldStates: Item[] = useMemo(() => {
     return state.list.map(item => {
-      return mapObject(item, field => {
-        return field.value;
-      });
+      return mapObject(item, field => field.value);
     });
   }, [state.list]);
 
@@ -108,9 +114,15 @@ export function useBaseList<Item extends object>(
       [listWithoutFieldStates, state.initial],
   );
 
-  const fieldsDirty = useDirty({fields})
+  const fieldsDirty = useDirty({fields});
 
-  const dirty = fieldsDirty || isBaseListDirty;
-
-  return {fields, dispatch, reset, dirty};
+  return {
+    fields,
+    dispatch,
+    reset,
+    dirty: fieldsDirty || isBaseListDirty,
+    defaultValue: state.initial,
+    value: listWithoutFieldStates,
+    newDefaultValue,
+  };
 }
